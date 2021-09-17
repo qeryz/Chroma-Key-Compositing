@@ -1,0 +1,22 @@
+h1{
+  text-align: left;
+  font-family: helvetica;
+  color: dark-grey;
+}
+
+body{
+  background-color: rgb(244,244,244);
+}
+
+canvas{
+  background-color: white;
+  height: 540px;
+  border: 1px solid lightgrey;
+}
+
+#c2{
+  background-image: url('');
+}
+input{
+  font-size: 12pt;
+}

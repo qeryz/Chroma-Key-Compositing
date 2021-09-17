@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name = "viewport" content = "width = device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+  <title>Green Screen Composite</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <script 
+    src='./SimpleImage.js'>
+    </script>
+
+    <h1>
+        Green Screen Remover
+    </h1>
+
+    <video id = "video" width = "1%" autoplay style="visibility:hidden;" controls>
+    <source id = "source" type = "video/mp4">
+    </video>
+
+    <p>
+    Foreground:
+    <input type = "file" name = "file" multiple = "false"
+    accept = "image/*|video/mp4" id = "finput" onchange = "uploadF(this);">
+    </p>
+
+    <p>
+        Background:
+        <input type = "file" multiple = "false"
+        accept = "image/*" id = "binput" onchange = "uploadB(this)">
+    </p>
+
+    <p>
+        <input type = "button" id = "gscrn" value = "Create Composite Image" onclick = "greenScreen()">
+        <input type = "button" id = "clr" value = "Clear" onclick = "clearCanvas()">
+    </p>
+
+    <p> <canvas id = "c1" width="1920" height = "1080"></canvas> </p> 
+    <p> </p><canvas id = "c2" width="1920" height = "1080"></canvas> </p>
+
+    <script src="./app.js"></script>
+</body>
+</html>
