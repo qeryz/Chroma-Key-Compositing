@@ -20,7 +20,7 @@ The main lines to note from the HTML document:
 
 The JavaScript code in `app.js` consists of 8 functions.
 
-### Dimensions Safety Check
+### Dimensions Safety Check, Clear Canvas
 
 The `checkDimensions()` function is a simple safety check to ensure the background image is at least as big as the foreground image (this check does not run for video files as the background image will simply repeat if not large enough for the foreground).
 The code is as follows: 
@@ -37,6 +37,37 @@ The code is as follows:
         return true;
       }
     }      
+```
+The `clearCanvas()` function is trivial, it simply clears canvas c1 and c2 and resets formatting of the page.
+
+### Upload Background
+The `inputB()` function for the background input is restricted to only accept an image. However, if the foreground is a video file, it inserts the background file as canvas c2's background image. But if the foreground is an image, simply draw the background to canvas c2 using the Simple Image script.
+
+```js
+    function uploadB(self){
+
+      if (!boolVideo){
+          var canvas2 = document.getElementById("c2");
+          var fileinput2 = document.getElementById("binput");
+
+          image2 = new SimpleImage(fileinput2);
+          image2.drawTo(canvas2);
+      }
+
+      else{
+          var file = document.getElementById("binput").files[0];
+          var reader = new FileReader();
+          reader.onloadend = function(){
+              document.getElementById('c2').style.backgroundImage = "url(" + reader.result + ")";        
+          }
+          if(file){
+              reader.readAsDataURL(file);
+          }
+          else{
+          }
+      }
+
+    }     
 ```
 
 ### Initializing the chroma-key player
