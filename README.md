@@ -25,23 +25,29 @@ The JavaScript code in `app.js` consists of 7 methods.
 The `doLoad()` method is called when the HTML document initially loads.  This method's job is to prepare the variables needed by the chroma-key processing code, and to set up an event listener so we can detect when the user starts playing the video.
 
 ```js
-  let processor = {
+let processor = {
     doLoad: function() {
       this.video = document.querySelector('#video');
+
       this.c1 = document.querySelector('#c1');
       this.ctx1 = this.c1.getContext("2d");
+
       this.c2 = document.querySelector('#c2');
       this.ctx2 = this.c2.getContext("2d");
+
       let self = this;
+
       this.video.addEventListener('play', function(){
         self.width = self.video.videoWidth;
         self.height = self.video.videoHeight;
         self.timerCallback();
       });
+
       this.video.addEventListener('loadeddata', function(){
         self.width = self.video.videoWidth;
         self.height = self.video.videoHeight;
         self.timerCallback();
       });
+      
     },
 ```
