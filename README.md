@@ -18,7 +18,26 @@ The main lines to note from the HTML document:
 
 ## The JavaScript code
 
-The JavaScript code in `app.js` consists of 7 methods.
+The JavaScript code in `app.js` consists of 8 functions.
+
+### Dimensions Safety Check
+
+The `checkDimensions()` function is a simple safety check to ensure the background image is at least as big as the foreground image (this check does not run for video files as the background image will simply repeat if not large enough for the foreground).
+The code is as follows: 
+
+
+```js
+    function checkDimensions(){
+      if (image2.getWidth() < image1.getWidth()){
+        alert("Please select a background image that is bigger in width and height than the foreground image.");
+        return false;
+      }
+      else{
+        alert("Success!");
+        return true;
+      }
+    }      
+```
 
 ### Initializing the chroma-key player
 
@@ -77,7 +96,7 @@ Then it calls the `computeFrame()` method, which performs the chroma-keying effe
 
 The last thing the callback does is call `setTimeout()` to schedule itself to be called again as soon as possible.  In the real world, you would probably schedule this to be done based on knowledge of the video's frame rate.
 
-### Manipulating the video frame data
+### Manipulating a video frame data
 
 The `computeFrame()` method, shown below, is responsible for actually fetching a frame of data and performing the chroma-keying effect.
 
