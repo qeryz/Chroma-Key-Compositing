@@ -56,7 +56,7 @@ Then `addEventListener()` is called to begin watching the `video` element so tha
 
 ### The timer callback
 
-The timer callback is called initially when the video starts playing (when the "play" event occurs), then takes responsibility for establishing itself to be called periodically in order to launch the keying effect for each frame.
+The timer callback is called initially when the video starts playing (when the "play" event occurs or when the content loads), then takes responsibility for establishing itself to be called periodically in order to launch the keying effect for each frame.
 
 ```js
     timerCallback: function() {
@@ -76,3 +76,53 @@ The first thing the callback does is check to see if the video is even playing; 
 Then it calls the `computeFrame()` method, which performs the chroma-keying effect on the current video frame.
 
 The last thing the callback does is call `setTimeout()` to schedule itself to be called again as soon as possible.  In the real world, you would probably schedule this to be done based on knowledge of the video's frame rate.
+
+### Manipulating the video frame data
+
+The `computeFrame()` method, shown below, is responsible for actually fetching a frame of data and performing the chroma-keying effect.
+
+```js
+  processor.computeFrame = function computeFrame() {
+    this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
+    const frame = this.ctx1.getImageData(0, 0, this.width, this.height);
+    const length = frame.data.length;
+
+    for (let i = 0; i < length; i += 4) {
+      const red = data[i + 0];
+      const green = data[i + 1];
+      const blue = data[i + 2];
+      if (green > 100 && red > 100 && blue < 43) {
+        data[i + 3] = 0;
+      }
+    }
+    this.ctx2.putImageData(frame, 0, 0);
+  };
+```
+
+When this routine is called, the video element is displaying the most recent frame of video data, which looks like this:
+
+![](video.png)
+
+In line 2, that frame of video is copied into the graphics context `ctx1` of the first canvas, specifying as the height and width the values we previously saved to draw the frame at half size.  Note that you can pass the video element into the context's `drawImage()` method to draw the current video frame into the context.  The result is:
+
+![](sourcectx.png)
+
+Line 3 fetches a copy of the raw graphics data for the current frame of video by calling the `getImageData()` method on the first context.  This provides raw 32-bit pixel image data we can then manipulate.  Line 4 computes the number of pixels in the image by dividing the total size of the frame's image data by four.
+
+The `for` loop that begins on line 6 scans through the frame's pixels, pulling out the red, green, and blue values for each pixel, and compares the values against predetermined numbers that are used to detect the green screen that will be replaced with the still background image imported from `foo.png`.
+
+Every pixel in the frame's image data that is found that is within the parameters that are considered to be part of the green screen has its alpha value replaced with a zero, indicating that the pixel is entirely transparent.  As a result, the final image has the entire green screen area 100% transparent, so that when it's drawn into the destination context in line 13, the result is an overlay onto the static backdrop.
+
+The resulting image looks like this:
+
+![](output.png)
+
+This is done repeatedly as the video plays, so that frame after frame is processed and displayed with the chroma-key effect.
+
+[View the full source for this example](https://github.com/mdn/dom-examples/tree/master/canvas/chroma-keying).
+
+## See also
+
+- [Web media technologies](/en-US/docs/Web/Media)
+- [Guide to media types and formats on the web](/en-US/docs/Web/Media/Formats)
+- [Learning area: Video and audio content](/en-US/docs/Learn/HTML/Multimedia_and_embedding/Video_and_audio_content)
