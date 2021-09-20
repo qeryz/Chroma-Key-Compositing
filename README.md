@@ -116,6 +116,43 @@ The `inputB()` function for the foreground allows video and image files as its i
 }    
 ```
 
+### Running the Green Screen Algorithm for Images
+The `greenScreen()` function is solely responsible for image composites, using Duke University's Simple Image script to create and draw images onto the canvas c2. Code as such:
+
+```js
+    function greenScreen(){
+
+      if (image1 == null || ! image1.complete()){
+        alert("Foreground image not loaded");
+        return;
+      }
+      if (image2 == null || ! image2.complete()){
+        alert("Background image not loaded");
+        return;
+      }
+
+      if (!checkDimensions()){
+        return;
+      }
+
+      var output = new SimpleImage(image1.getWidth(), image1.getHeight());
+
+      for (var pixel of image1.values()){
+        var greenThreshold = pixel.getBlue() + pixel.getRed();
+        var x = pixel.getX();
+        var y = pixel.getY();
+        if (pixel.getGreen() > greenThreshold){
+          var bgPixel = image2.getPixel(x,y);
+          output.setPixel(x,y, bgPixel);
+        }
+        else{
+          output.setPixel(x, y, pixel);
+        }
+      }
+      output.drawTo(canvas2);
+
+    }    
+```
 
 ### Initializing the chroma-key player
 
