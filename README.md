@@ -47,4 +47,5 @@ The `doLoad()` method is called when the HTML document initially loads.  This me
         self.height = self.video.videoHeight;
         self.timerCallback();
       });
+    },      
 ```
