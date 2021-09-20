@@ -11,13 +11,36 @@ The main lines to note from the HTML document:
 
     <script src="./app.js"></script>
  </html>
- Two key notes:
+ Two key points:
  
 1.  This document creates two [`canvas`](/en-US/docs/Web/HTML/Element/canvas) elements, with the IDs `c1` and `c2`.  Canvas `c1` is used to display the current frame of the original video/image, while `c2` is used to display the video after performing the chroma-key algorithm; `c2` is to be preloaded with a still image from the user that will be used to replace the green background in the video.
 2.  The JavaScript code is imported from a script named `app.js`.
 
 ## The JavaScript code
 
-The JavaScript code in `processor.js` consists of three methods.
+The JavaScript code in `app.js` consists of 7 methods.
 
 ### Initializing the chroma-key player
+
+The `doLoad()` method is called when the HTML document initially loads.  This method's job is to prepare the variables needed by the chroma-key processing code, and to set up an event listener so we can detect when the user starts playing the video.
+
+```js
+  const processor = {};
+
+  processor.doLoad = function doLoad() {
+    const video = document.getElementById('video');
+    this.video = video;
+
+    this.c1 = document.getElementById('c1');
+    this.ctx1 = this.c1.getContext('2d');
+
+    this.c2 = document.getElementById('c2');
+    this.ctx2 = this.c2.getContext('2d');
+
+    video.addEventListener('play', () => {
+        this.width = video.videoWidth / 2;
+        this.height = video.videoHeight / 2;
+        this.timerCallback();
+      }, false);
+  };
+```
