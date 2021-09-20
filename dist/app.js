@@ -13,7 +13,7 @@ var boolVideo = true;
 
 // Safety check to prevent compositing error
 function checkDimensions(){
-  if (image2.getWidth() < image1.getWidth()){
+  if (image2.getWidth() < image1.getWidth() || image2.getHeight() < image1.getHeight()){
     alert("Please select a background image that is bigger in width and height than the foreground image.");
     return false;
   }
