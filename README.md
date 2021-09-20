@@ -52,4 +52,26 @@ The `doLoad()` method is called when a user-uploaded video initially loads. This
 
 This code grabs references to the elements in the HTML document that are of our interest, namely the `video` element and the two `canvas` elements.  It also fetches references to the graphics contexts for each of the two canvases.  These will be used when we're actually doing the chroma-keying effect.
 
-Then `addEventListener()` is called to begin watching the `video` element so that we obtain notification when the user presses the play button on the video or the other `addEventListener()` is called to begin watching whne the user initiallyl loads the uploaded video.  In response to the user beginning playback, this code fetches the width and height of the video, halving each (we will be halving the size of the video when we perform the chroma-keying effect), then calls the `timerCallback()` method to start watching the video and computing the visual effect.
+Then `addEventListener()` is called to begin watching the `video` element so that we obtain notification when the user presses the play button on the video or the other `addEventListener()` is called to begin watching whne the user initiallyl loads the uploaded video.  In response to the user beginning playback, this code fetches the width and height of the video, then calls the `timerCallback()` method to start watching the video and processing the effect.
+
+### The timer callback
+
+The timer callback is called initially when the video starts playing (when the "play" event occurs), then takes responsibility for establishing itself to be called periodically in order to launch the keying effect for each frame.
+
+```js
+  processor.timerCallback = function timerCallback() {
+    if (this.video.paused || this.video.ended) {
+      return;
+    }
+    this.computeFrame();
+    setTimeout(() => {
+        this.timerCallback();
+      }, 0);
+  };
+```
+
+The first thing the callback does is check to see if the video is even playing; if it's not, the callback returns immediately without doing anything.
+
+Then it calls the `computeFrame()` method, which performs the chroma-keying effect on the current video frame.
+
+The last thing the callback does is call `setTimeout()` to schedule itself to be called again as soon as possible.  In the real world, you would probably schedule this to be done based on knowledge of the video's frame rate.
