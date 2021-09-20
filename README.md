@@ -7,4 +7,7 @@ The two main lines to note from the HTML document:
  <!DOCTYPE html>
      <p> <canvas id = "c1" width="1920" height = "1080"></canvas> </p> 
      <p> <canvas id = "c2" width="1920" height = "1080"></canvas> </p>
+    </div>
+
+    <script src="./app.js"></script>
  </html>
