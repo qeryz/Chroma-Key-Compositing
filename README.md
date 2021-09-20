@@ -20,7 +20,7 @@ The main lines to note from the HTML document:
 
 The JavaScript code in `app.js` consists of 8 functions.
 
-### Dimensions Safety Check
+### Dimensions Safety Check, Clear Canvas
 
 The `checkDimensions()` function is a simple safety check to ensure the background image is at least as big as the foreground image (this check does not run for video files as the background image will simply repeat if not large enough for the foreground).
 The code is as follows: 
@@ -37,6 +37,121 @@ The code is as follows:
         return true;
       }
     }      
+```
+The `clearCanvas()` function is trivial, it simply clears canvas c1 and c2 and resets formatting of the page.
+
+### Upload Background
+The `inputB()` function for the background input is restricted to only accept an image. However, if the foreground is a video file, it inserts the background file as canvas c2's background image. But if the foreground is an image, simply draw the background to canvas c2 using the Simple Image script.
+
+```js
+    function uploadB(self){
+
+      if (!boolVideo){
+          var canvas2 = document.getElementById("c2");
+          var fileinput2 = document.getElementById("binput");
+
+          image2 = new SimpleImage(fileinput2);
+          image2.drawTo(canvas2);
+      }
+
+      else{
+          var file = document.getElementById("binput").files[0];
+          var reader = new FileReader();
+          reader.onloadend = function(){
+              document.getElementById('c2').style.backgroundImage = "url(" + reader.result + ")";        
+          }
+          if(file){
+              reader.readAsDataURL(file);
+          }
+          else{
+          }
+      }
+
+    }     
+```
+
+### Upload Foreground
+The `inputB()` function for the foreground allows video and image files as its input. The function interprets the input file as either an image or video, which then decides which algorithm to implement for the respective format. Code as such:
+
+```js
+    function uploadF(self){
+    
+    var file = self.files[0];
+    const fileType = file['type'];
+    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
+
+    // If the file is an image, do
+    if (validImageTypes.includes(fileType)){
+        var canvas1 = document.getElementById("c1");
+        var fileinput1 = document.getElementById("finput");
+
+        image1 = new SimpleImage(fileinput1);
+        image1.drawTo(canvas1);
+        boolVideo = false;
+        if (document.getElementById("binput") != null){
+            uploadB(document.getElementById("binput"));
+        }
+    }
+
+    // Else if the file is a video, do
+    else {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var src = e.target.result;
+            var video = document.getElementById("video");
+            var source = document.getElementById("source");
+
+            source.setAttribute("src", src);
+            video.load();
+            video.play();
+        };
+
+        reader.readAsDataURL(file);
+        boolVideo = true;
+
+        processor.doLoad();
+    }
+ 
+}    
+```
+
+### Running the Green Screen Algorithm for Images
+The `greenScreen()` function is solely responsible for image composites, using Duke University's Simple Image script to create and draw images onto the canvas c2. Code as such:
+
+```js
+    function greenScreen(){
+
+      if (image1 == null || ! image1.complete()){
+        alert("Foreground image not loaded");
+        return;
+      }
+      if (image2 == null || ! image2.complete()){
+        alert("Background image not loaded");
+        return;
+      }
+
+      if (!checkDimensions()){
+        return;
+      }
+
+      var output = new SimpleImage(image1.getWidth(), image1.getHeight());
+
+      for (var pixel of image1.values()){
+        var greenThreshold = pixel.getBlue() + pixel.getRed();
+        var x = pixel.getX();
+        var y = pixel.getY();
+        if (pixel.getGreen() > greenThreshold){
+          var bgPixel = image2.getPixel(x,y);
+          output.setPixel(x,y, bgPixel);
+        }
+        else{
+          output.setPixel(x, y, pixel);
+        }
+      }
+      output.drawTo(canvas2);
+
+    }    
 ```
 
 ### Initializing the chroma-key player
