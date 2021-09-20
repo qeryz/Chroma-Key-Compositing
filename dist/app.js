@@ -127,6 +127,30 @@ function uploadB(self){
 
 // Set of function under processor, solely responsible for video composites
 let processor = {
+    doLoad: function() {
+      this.video = document.querySelector('#video');
+
+      this.c1 = document.querySelector('#c1');
+      this.ctx1 = this.c1.getContext("2d");
+
+      this.c2 = document.querySelector('#c2');
+      this.ctx2 = this.c2.getContext("2d");
+
+      let self = this;
+
+      this.video.addEventListener('play', function(){
+        self.width = self.video.videoWidth;
+        self.height = self.video.videoHeight;
+        self.timerCallback();
+      });
+
+      this.video.addEventListener('loadeddata', function(){
+        self.width = self.video.videoWidth;
+        self.height = self.video.videoHeight;
+        self.timerCallback();
+      });
+      
+    },
     timerCallback: function() {
       if (this.video.paused || this.video.ended) {
         return;
@@ -136,25 +160,6 @@ let processor = {
       setTimeout(function(){
           self.timerCallback();
       }, 0);
-    },
-    doLoad: function() {
-  
-      this.video = document.querySelector('#video');
-      this.c1 = document.querySelector('#c1');
-      this.ctx1 = this.c1.getContext("2d");
-      this.c2 = document.querySelector('#c2');
-      this.ctx2 = this.c2.getContext("2d");
-      let self = this;
-      this.video.addEventListener('play', function(){
-        self.width = self.video.videoWidth;
-        self.height = self.video.videoHeight;
-        self.timerCallback();
-      });
-      this.video.addEventListener('loadeddata', function(){
-        self.width = self.video.videoWidth;
-        self.height = self.video.videoHeight;
-        self.timerCallback();
-      });
     },
     computeFrame: function() {
       this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
