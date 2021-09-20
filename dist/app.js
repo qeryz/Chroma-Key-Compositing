@@ -149,7 +149,7 @@ let processor = {
         self.height = self.video.videoHeight;
         self.timerCallback();
       });
-      
+
     },
     timerCallback: function() {
       if (this.video.paused || this.video.ended) {
@@ -176,35 +176,33 @@ let processor = {
       }
       this.ctx2.putImageData(frame, 0, 0);
     }
-  
   };
 
-  // Function that clears and resets the canvases
-  function clearCanvas () {
-    var c1 = document.getElementById("c1");
-    var ctx1 = c1.getContext("2d");
-    ctx1.clearRect(0, 0, c1.width, c1.height);
-    var fin = document.getElementById("finput");
-    fin.value = '';
-    
-    var c2 = document.getElementById("c2");
-    var ctx2 = c2.getContext("2d");   
-    ctx2.clearRect(0, 0, c2.width, c2.height);
-    c2.style.backgroundImage = "url('')";
-    var bin = document.getElementById("binput");
-    bin.value = '';
-    
-    var videoElement = document.getElementById('video');
-    videoElement.pause();
-    
+// Function that clears and resets the canvases
+function clearCanvas () {
+  var c1 = document.getElementById("c1");
+  var ctx1 = c1.getContext("2d");
+  ctx1.clearRect(0, 0, c1.width, c1.height);
+  var fin = document.getElementById("finput");
+  fin.value = '';
+  
+  var c2 = document.getElementById("c2");
+  var ctx2 = c2.getContext("2d");   
+  ctx2.clearRect(0, 0, c2.width, c2.height);
+  c2.style.backgroundImage = "url('')";
+  var bin = document.getElementById("binput");
+  bin.value = '';
+  
+  var videoElement = document.getElementById('video');
+  videoElement.pause();
+  
 
-    image1 = null;
-    image2 = null;
-    boolVideo = true;
+  image1 = null;
+  image2 = null;
+  boolVideo = true;
 
-    c1.width = 1920;
-    c1.height = 1080;
-    c2.width = 1920;
-    c2.height = 1080;
-
+  c1.width = 1920;
+  c1.height = 1080;
+  c2.width = 1920;
+  c2.height = 1080;
 }
