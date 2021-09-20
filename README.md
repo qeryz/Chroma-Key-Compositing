@@ -59,15 +59,16 @@ Then `addEventListener()` is called to begin watching the `video` element so tha
 The timer callback is called initially when the video starts playing (when the "play" event occurs), then takes responsibility for establishing itself to be called periodically in order to launch the keying effect for each frame.
 
 ```js
-  processor.timerCallback = function timerCallback() {
-    if (this.video.paused || this.video.ended) {
-      return;
-    }
-    this.computeFrame();
-    setTimeout(() => {
-        this.timerCallback();
+    timerCallback: function() {
+      if (this.video.paused || this.video.ended) {
+        return;
+      }
+      this.computeFrame();
+      let self = this;
+      setTimeout(function(){
+          self.timerCallback();
       }, 0);
-  };
+    },
 ```
 
 The first thing the callback does is check to see if the video is even playing; if it's not, the callback returns immediately without doing anything.
