@@ -103,9 +103,7 @@ When this routine is called, the video element is displaying the most recent fra
 
 ![](video.png)
 
-In line 2, that frame of video is copied into the graphics context `ctx1` of the first canvas, specifying as the height and width the values we previously saved to draw the frame at half size.  Note that you can pass the video element into the context's `drawImage()` method to draw the current video frame into the context.  The result is:
-
-![](sourcectx.png)
+In line 2, that frame of video is copied into the graphics context `ctx1` of the first canvas, specifying as the height and width the values we previously saved to draw the frame at half size.  Note that you can pass the video element into the context's `drawImage()` method to draw the current video frame into the context.
 
 Line 3 fetches a copy of the raw graphics data for the current frame of video by calling the `getImageData()` method on the first context.  This provides raw 32-bit pixel image data we can then manipulate.  Line 4 computes the number of pixels in the image by dividing the total size of the frame's image data by four.
 
