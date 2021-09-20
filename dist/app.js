@@ -25,75 +25,78 @@ function checkDimensions(){
 
 // Function solely responsible for image composites, using Duke University's Simple Image script
 function greenScreen(){
-    if (image1 == null || ! image1.complete()){
+
+  if (image1 == null || ! image1.complete()){
     alert("Foreground image not loaded");
     return;
-    }
-    if (image2 == null || ! image2.complete()){
+  }
+  if (image2 == null || ! image2.complete()){
     alert("Background image not loaded");
     return;
-    }
+  }
 
-    if (!checkDimensions()){
+  if (!checkDimensions()){
     return;
-    }
+  }
 
-    var output = new SimpleImage(image1.getWidth(), image1.getHeight());
+  var output = new SimpleImage(image1.getWidth(), image1.getHeight());
 
-    for (var pixel of image1.values()){
-        var greenThreshold = pixel.getBlue() + pixel.getRed();
-        var x = pixel.getX();
-        var y = pixel.getY();
-        if (pixel.getGreen() > greenThreshold){
-            var bgPixel = image2.getPixel(x,y);
-            output.setPixel(x,y, bgPixel);
-        }
-        else{
-            output.setPixel(x, y, pixel);
-        }
+  for (var pixel of image1.values()){
+    var greenThreshold = pixel.getBlue() + pixel.getRed();
+    var x = pixel.getX();
+    var y = pixel.getY();
+    if (pixel.getGreen() > greenThreshold){
+      var bgPixel = image2.getPixel(x,y);
+      output.setPixel(x,y, bgPixel);
     }
-  
+    else{
+      output.setPixel(x, y, pixel);
+    }
+  }
   output.drawTo(canvas2);
+
 }
 
 // Function for foreground input responsible for drawing either an image or video onto the canvas(es)
 function uploadF(self){
-    var file = self.files[0];
-    const fileType = file['type'];
-    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
 
-    // If the file is an image, do
-    if (validImageTypes.includes(fileType)){
-        var canvas1 = document.getElementById("c1");
-        var fileinput1 = document.getElementById("finput");
+  var file = self.files[0];
+  const fileType = file['type'];
+  const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
 
-        image1 = new SimpleImage(fileinput1);
-        image1.drawTo(canvas1);
-        boolVideo = false;
-        if (document.getElementById("binput") != null){
-            uploadB(document.getElementById("binput"));
-        }
+  // If the file is an image, do
+  if (validImageTypes.includes(fileType)){
+    var canvas1 = document.getElementById("c1");
+    var fileinput1 = document.getElementById("finput");
+
+    image1 = new SimpleImage(fileinput1);
+    image1.drawTo(canvas1);
+    boolVideo = false;
+    
+    if (document.getElementById("binput") != null){
+      uploadB(document.getElementById("binput"));
     }
+  }
 
-    // Else if the file is a video, do
-    else {
-        var reader = new FileReader();
+  // Else if the file is a video, do
+  else {
+    var reader = new FileReader();
 
-        reader.onload = function(e) {
-            var src = e.target.result;
-            var video = document.getElementById("video");
-            var source = document.getElementById("source");
+    reader.onload = function(e) {
+        var src = e.target.result;
+        var video = document.getElementById("video");
+        var source = document.getElementById("source");
 
-            source.setAttribute("src", src);
-            video.load();
-            video.play();
-        };
+        source.setAttribute("src", src);
+        video.load();
+        video.play();
+    };
 
-        reader.readAsDataURL(file);
-        boolVideo = true;
+    reader.readAsDataURL(file);
+    boolVideo = true;
 
-        processor.doLoad();
-    }
+    processor.doLoad();
+  }
  
 }
 
@@ -102,81 +105,81 @@ function uploadF(self){
 // Else, if foreground is an image, simply draw the background to canvas 2.
 function uploadB(self){
 
-    if (!boolVideo){
-        var canvas2 = document.getElementById("c2");
-        var fileinput2 = document.getElementById("binput");
-        
-        image2 = new SimpleImage(fileinput2);
-        image2.drawTo(canvas2);
-    }
+  if (!boolVideo){
+    var canvas2 = document.getElementById("c2");
+    var fileinput2 = document.getElementById("binput");
+    
+    image2 = new SimpleImage(fileinput2);
+    image2.drawTo(canvas2);
+  }
 
-    else{
-        var file = document.getElementById("binput").files[0];
-        var reader = new FileReader();
-        reader.onloadend = function(){
-            document.getElementById('c2').style.backgroundImage = "url(" + reader.result + ")";        
-        }
-        if(file){
-            reader.readAsDataURL(file);
-        }
-        else{
-        }
+  else{
+    var file = document.getElementById("binput").files[0];
+    var reader = new FileReader();
+    reader.onloadend = function(){
+        document.getElementById('c2').style.backgroundImage = "url(" + reader.result + ")";        
     }
- 
+    if(file){
+        reader.readAsDataURL(file);
+    }
+    else{
+    }
+  }
+  
 }
 
 // Set of function under processor, solely responsible for video composites
 let processor = {
-    doLoad: function() {
-      this.video = document.querySelector('#video');
+  doLoad: function() {
+    this.video = document.querySelector('#video');
 
-      this.c1 = document.querySelector('#c1');
-      this.ctx1 = this.c1.getContext("2d");
+    this.c1 = document.querySelector('#c1');
+    this.ctx1 = this.c1.getContext("2d");
 
-      this.c2 = document.querySelector('#c2');
-      this.ctx2 = this.c2.getContext("2d");
+    this.c2 = document.querySelector('#c2');
+    this.ctx2 = this.c2.getContext("2d");
 
-      let self = this;
+    let self = this;
 
-      this.video.addEventListener('play', function(){
-        self.width = self.video.videoWidth;
-        self.height = self.video.videoHeight;
-        self.timerCallback();
-      });
+    this.video.addEventListener('play', function(){
+      self.width = self.video.videoWidth;
+      self.height = self.video.videoHeight;
+      self.timerCallback();
+    });
 
-      this.video.addEventListener('loadeddata', function(){
-        self.width = self.video.videoWidth;
-        self.height = self.video.videoHeight;
-        self.timerCallback();
-      });
+    this.video.addEventListener('loadeddata', function(){
+      self.width = self.video.videoWidth;
+      self.height = self.video.videoHeight;
+      self.timerCallback();
+    });
 
-    },
-    timerCallback: function() {
-      if (this.video.paused || this.video.ended) {
-        return;
-      }
-      this.computeFrame();
-      let self = this;
-      setTimeout(function(){
-          self.timerCallback();
-      }, 0);
-    },
-    computeFrame: function() {
-      this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-      let frame = this.ctx1.getImageData(0, 0, this.width, this.height);
-      let l = frame.data.length / 4;
-  
-      for (let i = 0; i < l; i++){
-        let r = frame.data[i * 4 + 0];
-        let g = frame.data[i * 4 + 1];
-        let b = frame.data[i * 4 + 2];
-        if (g > r + b) {
-          frame.data[i * 4 + 3] = 0;
-        }
-      }
-      this.ctx2.putImageData(frame, 0, 0);
+  },
+  timerCallback: function() {
+    if (this.video.paused || this.video.ended) {
+      return;
     }
-  };
+    this.computeFrame();
+    let self = this;
+    setTimeout(function(){
+        self.timerCallback();
+    }, 0);
+  },
+  computeFrame: function() {
+    this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
+    let frame = this.ctx1.getImageData(0, 0, this.width, this.height);
+    let l = frame.data.length / 4;
+
+    for (let i = 0; i < l; i++){
+      let r = frame.data[i * 4 + 0];
+      let g = frame.data[i * 4 + 1];
+      let b = frame.data[i * 4 + 2];
+      if (g > r + b) {
+        frame.data[i * 4 + 3] = 0;
+      }
+    }
+    this.ctx2.putImageData(frame, 0, 0);
+  }
+};
 
 // Function that clears and resets the canvases
 function clearCanvas () {
