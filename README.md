@@ -82,21 +82,21 @@ The last thing the callback does is call `setTimeout()` to schedule itself to be
 The `computeFrame()` method, shown below, is responsible for actually fetching a frame of data and performing the chroma-keying effect.
 
 ```js
-  processor.computeFrame = function computeFrame() {
-    this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-    const frame = this.ctx1.getImageData(0, 0, this.width, this.height);
-    const length = frame.data.length;
-
-    for (let i = 0; i < length; i += 4) {
-      const red = data[i + 0];
-      const green = data[i + 1];
-      const blue = data[i + 2];
-      if (green > 100 && red > 100 && blue < 43) {
-        data[i + 3] = 0;
+    computeFrame: function() {
+      this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
+      let frame = this.ctx1.getImageData(0, 0, this.width, this.height);
+      let l = frame.data.length / 4;
+  
+      for (let i = 0; i < l; i++){
+        let r = frame.data[i * 4 + 0];
+        let g = frame.data[i * 4 + 1];
+        let b = frame.data[i * 4 + 2];
+        if (g > r + b) {
+          frame.data[i * 4 + 3] = 0;
+        }
       }
+      this.ctx2.putImageData(frame, 0, 0);
     }
-    this.ctx2.putImageData(frame, 0, 0);
-  };
 ```
 
 When this routine is called, the video element is displaying the most recent frame of video data, which looks like this:
