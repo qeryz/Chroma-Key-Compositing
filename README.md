@@ -41,7 +41,7 @@ The code is as follows:
 The `clearCanvas()` function is trivial, it simply clears canvas c1 and c2 and resets formatting of the page.
 
 ### Upload Background
-The `inputB()` function for the background input is restricted to only accept an image. However, if the foreground is a video file, it inserts the background file as canvas c2's background image. But if the foreground is an image, simply draw the background to canvas c2 using the Simple Image script.
+The `uploadB(self)` function for the background input is restricted to only accept an image. However, if the foreground is a video file, it inserts the background file as canvas c2's background image. But if the foreground is an image, simply draw the background to canvas c2 using the Simple Image script.
 
 ```js
     function uploadB(self){
@@ -71,7 +71,7 @@ The `inputB()` function for the background input is restricted to only accept an
 ```
 
 ### Upload Foreground
-The `inputB()` function for the foreground allows video and image files as its input. The function interprets the input file as either an image or video, which then decides which algorithm to implement for the respective format. Code as such:
+The `uploadF(self)` function for the foreground allows video and image files as its input. The function interprets the input file as either an image or video, which then decides which algorithm to implement for the respective format. Code as such:
 
 ```js
     function uploadF(self){
