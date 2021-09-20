@@ -70,6 +70,53 @@ The `inputB()` function for the background input is restricted to only accept an
     }     
 ```
 
+### Upload Foreground
+The `inputB()` function for the foreground allows video and image files as its input. The function interprets the input file as either an image or video, which then decides which algorithm to implement for the respective format. Code as such:
+
+```js
+    function uploadF(self){
+    
+    var file = self.files[0];
+    const fileType = file['type'];
+    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
+
+    // If the file is an image, do
+    if (validImageTypes.includes(fileType)){
+        var canvas1 = document.getElementById("c1");
+        var fileinput1 = document.getElementById("finput");
+
+        image1 = new SimpleImage(fileinput1);
+        image1.drawTo(canvas1);
+        boolVideo = false;
+        if (document.getElementById("binput") != null){
+            uploadB(document.getElementById("binput"));
+        }
+    }
+
+    // Else if the file is a video, do
+    else {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var src = e.target.result;
+            var video = document.getElementById("video");
+            var source = document.getElementById("source");
+
+            source.setAttribute("src", src);
+            video.load();
+            video.play();
+        };
+
+        reader.readAsDataURL(file);
+        boolVideo = true;
+
+        processor.doLoad();
+    }
+ 
+}    
+```
+
+
 ### Initializing the chroma-key player
 
 The `doLoad()` method is called when a user-uploaded video initially loads. This method's function is to prepare the variables needed by the chroma-key processing code, and to set up two event listeners so we can detect when the user starts playing the video or when the video loads on upload.
