@@ -103,13 +103,13 @@ When this routine is called, the video element is displaying the most recent fra
 
 ![](video.png)
 
-In line 2, that frame of video is copied into the graphics context `ctx1` of the first canvas, specifying as the height and width the values we previously saved to draw the frame at half size.  Note that you can pass the video element into the context's `drawImage()` method to draw the current video frame into the context.
+In line 2, that frame of video is copied into the graphics context `ctx1` of the first canvas, specifying as the height and width the values we previously set.  Note that you can pass the video element into the context's `drawImage()` method to draw the current video frame into the context.
 
 Line 3 fetches a copy of the raw graphics data for the current frame of video by calling the `getImageData()` method on the first context.  This provides raw 32-bit pixel image data we can then manipulate.  Line 4 computes the number of pixels in the image by dividing the total size of the frame's image data by four.
 
-The `for` loop that begins on line 6 scans through the frame's pixels, pulling out the red, green, and blue values for each pixel, and compares the values against predetermined numbers that are used to detect the green screen that will be replaced with the still background image imported from `foo.png`.
+The `for` loop that begins on line 6 scans through the frame's pixels, pulling out the red, green, and blue values for each pixel, and compares the values against predetermined numbers that are used to detect the green screen that will be replaced with the still background image imported.
 
-Every pixel in the frame's image data that is found that is within the parameters that are considered to be part of the green screen has its alpha value replaced with a zero, indicating that the pixel is entirely transparent.  As a result, the final image has the entire green screen area 100% transparent, so that when it's drawn into the destination context in line 13, the result is an overlay onto the static backdrop.
+Every pixel in the frame's image data that is found that is within the parameters that are considered to be part of the green screen has its alpha value replaced with a zero, indicating that the pixel is entirely transparent.  As a result, the final image has the entire green screen area 100% transparent, so that when it's drawn into the destination context in line 14, the result is an overlay onto the static backdrop.
 
 The resulting image looks like this:
 
@@ -117,4 +117,4 @@ The resulting image looks like this:
 
 This is done repeatedly as the video plays, so that frame after frame is processed and displayed with the chroma-key effect.
 
-[View the full source for this project](https://github.com/qeryz/Chroma-Key-Compositing).
+[View the full source](https://github.com/qeryz/Chroma-Key-Compositing).
