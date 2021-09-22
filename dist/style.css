@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300&display=swap');
 h1{
-  text-align: left;
+  text-align: right;
   font-family: helvetica;
-  color: dark-grey;
+  font-size: 1.5vmax;
+  color: rgb(221, 216, 205);
+}
+
+#video {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 body {
@@ -11,13 +19,15 @@ body {
 #hero {
 background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.1)),
   url('https://images.pexels.com/photos/3697816/pexels-photo-3697816.jpeg');
- height: 600px;
+ width: 100%;
+ height: auto;
  background-size: cover;
  border: black;
  border-style: solid;
  border-width: 0.5px;
  border-radius: 15px;
  color: #fff;
+ font-size: 1.8vmax;
 }
 
 #hero h1 {
@@ -36,35 +46,36 @@ nav ul {
 }
 
 nav ul li {
-  margin: 0 1rem;
+  margin: 0 1.5vmax;
   font-weight: 700;
 }
 
 .content {
+  vertical-align: center;
   text-align: center;
-  font-size: 4rem;
+  font-size: 5vmax;
   margin-top: 100px;
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .content button {
-  font-size:1.5rem;
+  font-size:1.5vmax;
   color: #fff;
   background-color: #2c3e53;
-  opacity: 85%;
+  opacity: 80%;
   border: none;
-  padding: .5rem 2rem;
+  padding: .5vmax 2vmax;
   cursor: pointer;
   transition: all .3s ease;
 }
 
 .content button:hover {
-  background-color: #274363;
+  background-color: #213955;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -74,12 +85,28 @@ nav ul li {
 }
 
 .custom-file-upload {
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  font-size:1rem;
+  color: #fff;
+  align-content: center;
+  background-color: rgb(34, 34, 36);
+  border: solid rgba(255, 255, 255, 0.3) 1px;
+  padding: .1rem 2rem;
+  cursor: pointer;
+  opacity: 80%;
+  transition: all .3s ease;
+  border-radius: 0px;
+  -webkit-appearance: none;
+}
+
+.gscrn {
   font-size:1rem;
   color: #fff;
   align-content: center;
   background-color: #252d3a;
   border: none;
-  padding: .4rem 2rem;
+  padding: .1rem 2rem;
   cursor: pointer;
   transition: all .3s ease;
 }
@@ -95,9 +122,12 @@ input[type="file"] {
 
 canvas{
   background-color:#202020;
-  height: 540px;
+  width: 75%;
+  height: auto;
+  position: center;
+  /* height: 540px; */
   border: 1px solid rgb(71, 71, 71);
-  border-radius: 15px;
+  border-radius: 10px;
   border-style:double;
 }
 
@@ -107,3 +137,4 @@ canvas{
 input{
   font-size: 12pt;
 }
+

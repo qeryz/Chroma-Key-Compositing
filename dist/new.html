@@ -18,48 +18,47 @@
             <nav>
                 <h1>Chroma Key Compositing</h1>
                 <ul>
-                    <li>License Use and References</li>
+                    <li>License</li>
+                    <li>References</li>
+                    <li>About</li>
                 </ul>
             </nav>
             <div class="content">
-                <p>Green Screener
+                <p>Green Screen Removal
                 </p>
                 <button>Learn more</button>
             </div>
         </div>
     </section>
     
-
-    <video id = "video" width = "1%" autoplay style="visibility:hidden;" controls>
-    <source id = "source" type = "video/mp4">
+    <video id = "video" width = "1%" autoplay style="visibility:hidden;" playsinline controls>
+        <source id = "source" type = "video/mp4">
     </video>
 
-    <div class = "grnBody">
+    <div class = "grnBody" id = "grn">
         <p>
-            Foreground :
             <label class="custom-file-upload">
                 <input type = "file" name = "file" multiple = "false"
-                accept = "image/*|video/mp4" id = "finput" onchange = "uploadF(this);">
-                Select Image/Video
+                accept = "image/*|video/mp4" id = "finput" onchange = "uploadF(this)">
+                Select Foreground
             </label>
             </p>
         
             <p>
-                Background:
                 <label class="custom-file-upload">
                     <input type = "file" multiple = "false"
                     accept = "image/*" id = "binput" onchange = "uploadB(this)">
-                    Select Image
+                    Select Background
                 </label>
             </p>
         
             <p>
-                <input type = "button" class = custom-file-upload id = "gscrn" value = "Create Composite Image" onclick = "greenScreen()">
-                <input type = "button" class = custom-file-upload id = "clr" value = "Clear" onclick = "clearCanvas()">
+                <input type = "button" class = "custom-file-upload" id = "gscrn" value = "Composite Image" onclick = "greenScreen()">
+                <input type = "button" class = "custom-file-upload" id = "clr" value = "Clear" onclick = "clearCanvas()">
             </p>
             
-            <p> <canvas id = "c1" width="1920" height = "1080"></canvas> </p> 
-            <p> <canvas id = "c2" width="1920" height = "1080"></canvas> </p>
+            <p> <canvas id = "c1" hidden = true></canvas> </p> 
+            <p> <canvas id = "c2" hidden = true></canvas> </p>
     </div>
 
     <script src="./app.js"></script>

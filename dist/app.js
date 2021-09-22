@@ -8,7 +8,22 @@
 // The following variables are used to help differentiate between video or image compositing
 var image1 = null;
 var image2 = null;
-var canvas2 = document.getElementById("c2");
+
+// this.c1 = document.querySelector('#c1');
+// this.ctx1 = this.c1.getContext("2d");
+
+var videoElement;
+
+var canvas1 = document.querySelector('#c1');
+var canvas2 = document.querySelector('#c2');
+
+
+// this.ctx2 = this.c2.getContext("2d");
+
+// ctx1.canvas.width = window.innerWidth;
+// ctx1.canvas.height = 5.5 * window.innerWidth/4;
+// ctx2.canvas.width = window.innerWidth;
+// ctx2.canvas.height = 4.5 * window.innerWidth/4;
 var boolVideo = true; 
 
 // Safety check to prevent compositing error
@@ -63,11 +78,13 @@ function uploadF(self){
   var file = self.files[0];
   const fileType = file['type'];
   const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
+  
 
   // If the file is an image, do
   if (validImageTypes.includes(fileType)){
     var canvas1 = document.getElementById("c1");
     var fileinput1 = document.getElementById("finput");
+    canvas1.hidden = false;
 
     image1 = new SimpleImage(fileinput1);
     image1.drawTo(canvas1);
@@ -80,6 +97,10 @@ function uploadF(self){
 
   // Else if the file is a video, do
   else {
+    videoElement = document.getElementById('video');
+    videoElement.style = "visibility:visible"
+    videoElement.style.width = "70%";
+  
     var reader = new FileReader();
 
     reader.onload = function(e) {
@@ -94,7 +115,7 @@ function uploadF(self){
 
     reader.readAsDataURL(file);
     boolVideo = true;
-
+    
     processor.doLoad();
   }
  
@@ -108,12 +129,15 @@ function uploadB(self){
   if (!boolVideo){
     var canvas2 = document.getElementById("c2");
     var fileinput2 = document.getElementById("binput");
+    canvas2.hidden = false;
     
     image2 = new SimpleImage(fileinput2);
     image2.drawTo(canvas2);
   }
 
   else{
+    var canvas2 = document.getElementById("c2");
+    canvas2.hidden = false;
     var file = document.getElementById("binput").files[0];
     var reader = new FileReader();
     reader.onloadend = function(){
@@ -142,12 +166,21 @@ let processor = {
     let self = this;
 
     this.video.addEventListener('play', function(){
+      
       self.width = self.video.videoWidth;
       self.height = self.video.videoHeight;
       self.timerCallback();
     });
 
     this.video.addEventListener('loadeddata', function(){
+      canvas1.hidden = false;
+      canvas1.width = videoElement.videoWidth;
+      canvas1.height = videoElement.videoHeight;
+
+      canvas2.hidden = false;
+      canvas2.width = videoElement.videoWidth;
+      canvas2.height = videoElement.videoHeight;
+
       self.width = self.video.videoWidth;
       self.height = self.video.videoHeight;
       self.timerCallback();
@@ -155,6 +188,7 @@ let processor = {
 
   },
   timerCallback: function() {
+    
     if (this.video.paused || this.video.ended) {
       return;
     }
@@ -198,14 +232,19 @@ function clearCanvas () {
   
   var videoElement = document.getElementById('video');
   videoElement.pause();
-  
-
-  image1 = null;
-  image2 = null;
-  boolVideo = true;
+  videoElement.style = "visibility:hidden"
+  videoElement.style.width = "1%";
 
   c1.width = 1920;
   c1.height = 1080;
   c2.width = 1920;
   c2.height = 1080;
+
+  c1.hidden = true;
+  c2.hidden = true;
+
+  image1 = null;
+  image2 = null;
+
+  boolVideo = true;
 }
